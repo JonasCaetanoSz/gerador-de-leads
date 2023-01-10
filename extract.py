@@ -1,5 +1,5 @@
 from pathlib import Path
-from tkinter import Tk, Canvas, Text, Button, PhotoImage, Toplevel
+from tkinter import Tk, Canvas, Text, Button, PhotoImage, Toplevel, messagebox
 from insta import Instagram
 from threading import Thread
 import os
@@ -11,9 +11,18 @@ ASSETS_PATH = os.getcwd() + "/assets"
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-# janela de extração
+def close(insta:Instagram):
 
-# adiconar conta (função temporaria)
+    try: 
+
+        insta.book.save(rf"{insta.xlsxpath}/{insta.user}.xlsx")
+        quit()
+    
+    except Exception as e:
+        
+        quit()
+        
+# adiconar conta 
 
 def add_gram(insta):
 
@@ -32,6 +41,7 @@ def add_gram(insta):
 
         print("erro ao fazer login")
         print(e)
+# janela de extração
 
 def extract(window, user, grams, outputfolder):
 
@@ -139,10 +149,11 @@ def extract(window, user, grams, outputfolder):
     )
 
     insta = Instagram(user=user, output=outputfolder, grams=grams, log_entry=entry_1, text_total=text_total,window=window, canvas=canvas)
-    theardInsta = Thread(target=insta.obterseguidores)
+    theardInsta = Thread(target=insta.obterseguidores, daemon=True)
     theardInsta.start()
     window.resizable(False, False)
     window.title("extraindo seguidores")
     window.iconbitmap(relative_to_assets("icon.ico"))
+    window.protocol("WM_DELETE_WINDOW", lambda: close (insta))
     window.mainloop()
 

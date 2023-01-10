@@ -31,6 +31,7 @@ class Instagram:
       self.window = window
       self.canvas = canvas
       self.block = False
+      self.xlsxpath = None
 
       # banco de dados temporario para perfis analisados e para lista de seguidores
       self.conn = sqlite3.connect(tempfile.TemporaryFile(suffix=".db", delete=True).name, check_same_thread=False)
@@ -92,6 +93,7 @@ class Instagram:
          self.sheet["C1"].font = self.sheet["C1"].font.copy(bold=True)
          self.sheet["D1"].font = self.sheet["D1"].font.copy(bold=True)
          self.sheet["E1"].font = self.sheet["E1"].font.copy(bold=True)
+         self.xlsxpath = pathfile
          return pathfile
 
 
@@ -125,6 +127,7 @@ class Instagram:
          self.sheet["D1"].font = self.sheet["D1"].font.copy(bold=True)
          self.sheet["E1"].font = self.sheet["E1"].font.copy(bold=True)
          
+         self.xlsxpath = pathfile
          return pathfile
 
    def add_gram(self):
@@ -392,7 +395,7 @@ class Instagram:
             try:
 
                self.analise_control += 1
-               if self.analise_control == 4:
+               if self.analise_control == 2:
 
                   time.sleep(self.intervalo)
                   self.analise_control = 0
@@ -401,7 +404,7 @@ class Instagram:
 
                   self.cursor.execute(""" INSERT INTO analisados (userid) VALUES (?)""", (user_now[0][0],) )
                   self.conn.commit()
-                  Thread(target=self.analisar , args=(user_now,xlsxpath,)).start()
+                  Thread(target=self.analisar , args=(user_now,xlsxpath,), daemon=True).start()
                   self.new_count += 1
 
                # segunda coleta de id
@@ -410,7 +413,6 @@ class Instagram:
                   self.writeLog(f"pegando id de mais 1000 seguidores...")
                   total = len(self.cursor.execute(""" SELECT sessionid from anaçisar""").fetchall())
                   self.followers =  self.gerenciarcontas(method="followers" , user_id=self.userdata.pk, amount=total + 1000 , xlsxpath=xlsxpath)
-                  # primeira coleta de usersIDS
                   self.writeLog("copiando lista de ID'S")
 
                   for user_id in self.followers.keys():

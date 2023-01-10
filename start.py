@@ -22,7 +22,36 @@ def add_gram(label_acc):
     login = entry_2.get()
     passw = entry_3.get()
 
-    if login == "" or login.isspace() or passw == "" or passw.isspace():
+    # login via sessionID (cookies)
+    if  login != "" and login.isspace() is False and  passw == "" or passw.isspace(): 
+
+        try:
+
+            notification.notify(
+                title='adicionando nova conta',
+                message='fazendo login no instagram, isso pode levar alguns segundos...',
+                app_name='extrair contatos do instagram',
+                app_icon='assets/icon.' + ('ico' if platform == 'win' else 'png'),
+                timeout=1
+            )
+            gram = Client()
+            gram.login_by_sessionid(login)
+            grams.append({"gram":gram, "username": gram.account_info().username})
+            canvas.itemconfig(label_Acc, text=f'contas: {len(grams)}')
+            notification.notify(
+                title="sucesso!",
+                message='uma nova conta do instagram foi adicionada!',
+                app_name='extrair contatos do instagram',
+                app_icon='assets/icon.' + ('ico' if platform == 'win' else 'png'),
+                timeout=1
+            )
+            
+        
+        except Exception as e:
+
+            messagebox.showerror(title="erro ao fazer login", message=f"message: {e}")
+
+    elif login == "" or login.isspace() or passw == "" or passw.isspace():
 
         messagebox.showerror(title="impossivel fazer login", message="verifique os dados informados")
     
