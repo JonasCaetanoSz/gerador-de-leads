@@ -15,7 +15,7 @@ git clone https://github.com/JonasCaetanoSz/gerador-de-leads.git
 inicia e instala as dependecias em um ambiente virtual:
 
 ```bash
-python -m venv gerador-de-leads && cd gerador-de-leads/scripts && activate && cd.. pip install -r requirements.txt 
+python -m venv gerador-de-leads && cd gerador-de-leads/scripts && activate && cd.. && pip install -r requirements.txt 
 ```
 
 inicie o programa:
