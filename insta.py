@@ -411,7 +411,7 @@ class Instagram:
                if self.new_count == 1000:
 
                   self.writeLog(f"pegando id de mais 1000 seguidores...")
-                  total = len(self.cursor.execute(""" SELECT sessionid from anaçisar""").fetchall())
+                  total = len(self.cursor.execute(""" SELECT sessionid FROM analisar""").fetchall())
                   self.followers =  self.gerenciarcontas(method="followers" , user_id=self.userdata.pk, amount=total + 1000 , xlsxpath=xlsxpath)
                   self.writeLog("copiando lista de ID'S")
 
